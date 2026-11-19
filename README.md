@@ -5,40 +5,13 @@
 ## Repository structure
 
 ```text
-configs/
-  counterfactual_safe_mmlu.json    Steering configuration for MMLU
-  quickstart_dija.json             Steering configuration for DIJA/AdvBench
-
-scripts/
-  train_value_model.py          Value-model training entry point
-  evaluate_dija_advbench_generation.py
-                                    DIJA/AdvBench CURE generation
-  evaluate_mmlu_generation.py      MMLU CURE evaluation
-  judge_with_qwenguard.py         Local QwenGuard safety judge
-  judge_with_openai.py            OpenAI-compatible safety judge
-
-models/
-  value_model.py                   Full-CLS and cached readout-CLS value models
-
-utils/
-  counterfactual_safe_steering.py  Standard CURE decoder
-  low_cost_counterfactual_safe_steering.py
-                                    Cached-readout and generator-feature decoders
-  modeling_llada.py                Repository LLaDA implementation
-  generate_function_llada.py       Masked diffusion generation utilities
-  value_model_loader.py            Checkpoint and architecture loading
-  backbone_utils.py                Backbone inspection
-  dija.py                          DIJA prompt and mask helpers
-
-benchmarks/
-  AdvBench/data/prompts.json       Original harmful prompts
-  AdvBench/data/prompts_dija.json  DIJA refined masked prompts
-  mmlu_multisubject_test.jsonl     MMLU test questions
-
-data/train_offline/
-  advanced_tree_data.json          Offline value-model training data
-
-SYMBOL_CORRESPONDENCE.md           Paper-to-code notation map
+configs/                    Steering configurations
+scripts/                    Training, generation, evaluation, and judging
+models/                     Safety value-model definitions
+utils/                      CURE decoders and LLaDA utilities
+benchmarks/                 AdvBench and MMLU evaluation data
+data/train_offline/         Offline value-model training data
+SYMBOL_CORRESPONDENCE.md    Paper-to-code notation map
 ```
 
 ## Method at a glance
