@@ -1,0 +1,7 @@
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Local experiment outputs
+/results/
+/models/value_model_checkpoints/

@@ -1,0 +1,20 @@
+[
+  {
+    "name": "mmlu_counterfactual_safe",
+    "steps": 64,
+    "gen_length": 32,
+    "mask_id": 126336,
+    "time_feature_mode": "progress_ratio",
+    "proposal_temperature": 0.2,
+    "unsafe_weight": 0.8,
+    "uncertainty_weight": 0.2,
+    "necessity_weight": 0.25,
+    "sufficiency_weight": 0.75,
+    "remask_threshold": 0.4,
+    "remask_threshold_floor": 0.2,
+    "max_remask_ratio": 0.85,
+    "min_keep_per_step": 0,
+    "use_linear_threshold_decay": true,
+    "fixed_remask_threshold": false
+  }
+]
