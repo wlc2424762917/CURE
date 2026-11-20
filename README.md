@@ -1,6 +1,6 @@
 # CURE
 
-**CURE (Counterfactual Unsafe-token Re-masking for Diffusion Large Language Model Test-time Alignment)** is a test-time safety alignment method for masked diffusion language models. The base LLaDA generator remains frozen. During iterative denoising, CURE evaluates provisional tokens with a learned safety value model and re-masks positions that are likely to lead to unsafe generations.
+**CURE (Counterfactual Unsafe-token Re-masking for Diffusion Large Language Model Test-time Alignment)** aligns masked diffusion language models at inference time with a frozen LLaDA generator and a learned safety value model.
 
 ## Repository structure
 
@@ -14,20 +14,15 @@ data/train_offline/         Offline value-model training data
 SYMBOL_CORRESPONDENCE.md    Paper-to-code notation map
 ```
 
-## Method at a glance
+## Method
 
-At each denoising step:
-
-1. LLaDA proposes tokens for a subset of masked positions.
-2. CURE scores the proposal and counterfactual views that drop one candidate token or retain one candidate token.
-3. Necessity, sufficiency, and proposal uncertainty are combined into a re-mask score.
-4. High-scoring positions are re-masked and can be rewritten on later denoising steps.
+At each denoising step, LLaDA proposes tokens, the value model scores counterfactual token views, and high-risk positions are re-masked.
 
 The paper notation and its implementation mapping are listed in [SYMBOL_CORRESPONDENCE.md](SYMBOL_CORRESPONDENCE.md).
 
 ## Installation
 
-The training data is tracked with Git LFS. Model IDs can be replaced with local model directories.
+Training data uses Git LFS. Model IDs may be replaced with local paths.
 
 ```bash
 git lfs install
@@ -39,7 +34,7 @@ python -m pip install -r requirements.txt
 
 ## LLaDA training and DIJA quickstart
 
-Run from the repository root. Set `LLADA_PATH` and `QWENGUARD_PATH` to model IDs or local paths.
+Run from the repository root. Set model paths as needed.
 
 ```bash
 export LLADA_PATH=GSAI-ML/LLaDA-8B-Instruct
@@ -50,7 +45,7 @@ export RESULT_DIR="results/$RUN_NAME"
 mkdir -p "$RESULT_DIR"
 ```
 
-Train a cached readout value model with the bundled offline data:
+Train the value model:
 
 ```bash
 torchrun --standalone --nnodes=1 --nproc_per_node=4 scripts/train_value_model.py \
@@ -62,7 +57,7 @@ torchrun --standalone --nnodes=1 --nproc_per_node=4 scripts/train_value_model.py
   --batch_size 8 --grad_accum_steps 1 --epochs 3 --lr 1e-5 --seed 42
 ```
 
-Generate CURE-only DIJA/AdvBench responses:
+Generate DIJA/AdvBench responses:
 
 ```bash
 export VALUE_MODEL_PATH="$CHECKPOINT_DIR/value_model_best.pt"
@@ -79,7 +74,7 @@ python scripts/evaluate_dija_advbench_generation.py \
   --save_every 1 --resume --seed 456
 ```
 
-## Optional safety judges
+## Safety judges
 
 ```bash
 python scripts/judge_with_qwenguard.py \
